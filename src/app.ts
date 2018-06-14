@@ -5,12 +5,10 @@ import movieDbApi from './external/movieDbApi';
 import viaplayApi from './external/viaplayApi';
 
 // Test
-// Cluster
-// Docker
 // Readme
 
 const app: Application = express();
-const port: number = parseInt(process.env.PORT) || 3001;
+const port: number = parseInt(process.env.PORT) || 8080;
 app.use(helmet());
 
 app.get('/api/trailer', (req: Request, res: Response, next: NextFunction) => {
