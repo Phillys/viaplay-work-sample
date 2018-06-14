@@ -1,12 +1,12 @@
-import axios, { AxiosPromise, AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import { cacheAdapterEnhancer } from 'axios-extensions';
 
-// export type IHttpClient = AxiosInstance;
-export type IHttpRequestConfig = AxiosRequestConfig;
-
 // Not ideal, should not depend upon Axios at all.
+export type IHttpClientPromise<T> = AxiosPromise<T>;
+export type IHttpRequestConfig = AxiosRequestConfig
+
 export interface IHttpClient {
-  get<T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>;
+  get<T = any>(url: string, config?: IHttpRequestConfig): IHttpClientPromise<T>;
 }
 
 export function httpClientFactory(config?: IHttpRequestConfig): IHttpClient {
