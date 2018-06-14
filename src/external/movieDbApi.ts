@@ -32,7 +32,7 @@ export class MovieDbApi {
       });
   }
     
-  getMovieTrailer(id: number) : Promise<string|null> {
+  getMovieTrailer(id: number) : Promise<string> {
     return this.http
       .get(`/movie/${id}/videos`)
       .then(({ data }) => {
