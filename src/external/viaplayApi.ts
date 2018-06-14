@@ -2,7 +2,7 @@ import get from 'lodash/get';
 import URL, { UrlWithStringQuery } from 'url';
 import { IHttpClient, httpClientFactory } from '../services/httpClient';
 
-class ViaplayApi {
+export class ViaplayApi {
 
   private http: IHttpClient;
 
@@ -27,7 +27,7 @@ class ViaplayApi {
         return this.http
           .get(url)
           .then(({ data }) => resolve(data))
-          .catch(() => reject(Error('Error, could not retrive the movie from Viaplay')));
+          .catch(() => reject(new Error('Error, could not retrive the movie from Viaplay')));
       }
 
       return reject(new Error('Invalid Viaplay URL'));
