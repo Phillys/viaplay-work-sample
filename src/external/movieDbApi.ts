@@ -40,7 +40,7 @@ export class MovieDbApi {
         const ytTrailer = trailers.find((t: any) => t.type === 'Trailer' && t.site === 'YouTube');
         
         if (ytTrailer) {
-          return `https://youtube.com/watch?v=${ytTrailer.key}`;
+          return `https://youtu.be/${ytTrailer.key}`;
         }
 
         const err = new Error('Movie trailer not found');
