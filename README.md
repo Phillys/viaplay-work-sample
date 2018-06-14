@@ -1,23 +1,22 @@
 # Viaplay Work Sample Assignment
 
 ## How to install & run
-There are three ways of running the API. Locally with Node.js, locally with PM2 (for auto clustering) and using a simple Docker container.
+I recommend running the API server in one of the following ways; locally with Node.js, locally with PM2 (for auto clustering) or using Docker.
 
 ### Configuration
-Start by copying `example.env` to `.env`.
+The `.env` file is used for configuration. Start by copying `example.env` to `.env`.
 ```
 cp example.env .env
 ```
+Please enter the API key for the Movie DB API. You can also change which port Node.js (Express) is listening on.
 
-The `.env` file is used for configuration. Please supply the API key for the Movie DB API. You can also change which port Node.js (Express) is listening on.
-
-### Local with Node.js 10.x
+### Node.js 10.x
 ```
 npm install
 npm start
 ```
 
-### Local with PM2
+### PM2
 ```
 npm install -g PM2
 npm install
@@ -30,13 +29,7 @@ docker build -t viaplay-work-sample .
 docker run -p 8080:8080 -d viaplay-work-sample
 ```
 
-## Performance
+## Food for thought
+This is not by any means a production ready implementation. First of all I would never consider to run the application by itself without any reverse proxy/web server (Nginx/HAProxy/AWS API Gateway) in front of it. Rate limiting and authentication would improve security and reliability. The tests should be extended with end-to-end (e2e) tests to verify the application flow. I would also evaluate if all external code dependencies really are necessary since they could pose a security risk (not now, but maybe in future versions).
 
-
-## Scalability
-Cache
-Threads
-
-
-## Tests
-E2e
+To successfully perform under high load (measured by req/sec) I consider parallelization and caching to be paramount in this assignment. In my implementation I use a plugin along the HTTP client (Axios) to cache all requests. One reason to use caching is because the application is I/O bound as we have to do three subsequent requests (!!!) to get one movie trailer. The caching plugin uses Node's process memory which may not be ideal for production. In production we would be better of using Redis or some other fast in-memory datastore. I/O heavy tasks can often be facilitated by parallelization but since all the requests depend on the data from each other we must dispatch them sequentially. One thing we can do to improve the performance of the API is to leverage the Node cluster module, either by using a process manager (PM2) or implement it in the application itself. Another approach could be to run multiple instances/containers (maybe orchestrated using Kubernetes) of the API application.
