@@ -4,9 +4,6 @@ import helmet from 'helmet';
 import movieDbApi from './external/movieDbApi';
 import viaplayApi from './external/viaplayApi';
 
-// Test
-// Readme
-
 const app: Application = express();
 const port: number = parseInt(process.env.PORT) || 8080;
 app.use(helmet());
