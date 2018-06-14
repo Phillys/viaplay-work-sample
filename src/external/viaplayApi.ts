@@ -22,10 +22,16 @@ class ViaplayApi {
   }
 
   getFromUrl(url: string) : Promise<any> {
-    return this.http
-      .get(url)
-      .then(({ data }) => data)
-      .catch(() => { throw new Error('Error, could not retrive the movie from Viaplay'); });
+    return new Promise((resolve, reject) => {
+      if (this.isValidUrl(url)) {
+        return this.http
+          .get(url)
+          .then(({ data }) => resolve(data))
+          .catch(() => reject(Error('Error, could not retrive the movie from Viaplay')));
+      }
+
+      return reject(new Error('Invalid Viaplay URL'));
+    });
   }
 
   getImdbIdFromUrl(url: string) : Promise<string> {
