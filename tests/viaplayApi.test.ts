@@ -1,34 +1,14 @@
-import { MovieDbApi } from '../src/external/movieDbApi';
-import { IHttpClient } from '../src/services/httpClient';
-import { AxiosRequestConfig, AxiosPromise } from 'axios';
-import URL, { UrlWithStringQuery } from 'url';
+import viaplayApi from './mocks/viaplayApi.mock';
 
-class MockHttpClient implements IHttpClient {
-  get(url, config?: AxiosRequestConfig): AxiosPromise<any> {
-    return new Promise((resolve, reject) => {
-      const { pathname }: UrlWithStringQuery = URL.parse(url);
-      
-      if (pathname.endsWith('tt2543164') === false) {
-        reject();
-      }
-
-      return resolve({
-        config: {},
-        status: 200,
-        statusText: 'OK',
-        headers: [],
-        data: {
-          movie_results: [{ id: 329865 }]
-        }
-      })
-    });
-  }
-}
-
-const movieDbApi: MovieDbApi = new MovieDbApi(new MockHttpClient());
-
-test('test Viaplay URL API happy path', () => {
-  movieDbApi.findMovieId('tt2543164').then((id: number) => {
-    expect(id).toBe(329865);
-  });
+describe('Viaplay API', () => {
+  test('getFromUrl retrieves movie using URL', async () => {
+    await expect(viaplayApi.getFromUrl('https://content.viaplay.se/pc-se/film/arrival-2016'))
+      .resolves
+      .toHaveProperty(['_embedded', 'viaplay:blocks', 0, '_embedded', 'viaplay:product', 'content', 'imdb', 'id'], 'tt2543164');
+  })
+  test('getImdbIdFromUrl retrieves IMDB ID using URL', async () => {
+    await expect(viaplayApi.getImdbIdFromUrl('https://content.viaplay.se/pc-se/film/arrival-2016'))
+      .resolves
+      .toBe('tt2543164');
+  })
 })
