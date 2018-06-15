@@ -20,6 +20,7 @@ npm start
 ```
 npm install -g PM2
 npm install
+npm run build
 pm2 start pm2.config.js
 ```
 
